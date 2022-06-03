@@ -12,6 +12,7 @@ def get_kinamtics_data_workflow(
     :param: pitch_report: The pitch report data
     :return:
     '''
+    print('Starting Kinematics Data Workflow')
     return get_frame_by_frame_data_and_key_list(
         pitch_report=pitch_report
     )
@@ -27,7 +28,7 @@ def get_frame_by_frame_data_and_key_list(
     :return:
     '''
     try:
-        key_list = pitch_report
+        key_list = loads(pitch_report['result']['kinematics'])['angle_list']
         frame_data = loads(pitch_report['result']['kinematics'])['frames']
     except (KeyError, TypeError, IndexError):
         return error('Unknow error')
@@ -62,7 +63,9 @@ def sort_data_by_key_list(
             }
         for frame in frame_data:
             for i, key in enumerate(key_list):
-                vel_ang_plot[key]['velocity'] += frame['velocity'][i]
-                vel_ang_plot[key]['angle'] += frame['angle'][i]
+                vel_ang_plot[key]['velocity'].append(frame['velocity'][i])
+                vel_ang_plot[key]['angle'].append(frame['angle'][i])
+
+        return vel_ang_plot
     except (KeyError, TypeError, IndexError):
         return error('Unknow error')

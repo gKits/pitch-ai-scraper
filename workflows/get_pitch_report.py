@@ -97,7 +97,6 @@ def get_pitch_report(
     ).json()
 
     if not pitch_report and retry_counter < 3:
-        print('Hallo')
         get_pitch_report(
             request_url=request_url,
             headers=headers,

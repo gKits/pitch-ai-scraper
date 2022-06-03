@@ -1,5 +1,6 @@
 from workflows.get_pitch_report import get_pitch_report_workflow
 from workflows.get_kinematics_data import get_kinamtics_data_workflow
+from json import dump
 
 
 request_url = (
@@ -20,4 +21,8 @@ pitch_report = get_pitch_report_workflow(
 )
 
 if pitch_report:
-    pass
+    kine = get_kinamtics_data_workflow(
+        pitch_report=pitch_report
+    )
+    with open('j.json', 'w') as write:
+        dump(kine, write, indent=4)
