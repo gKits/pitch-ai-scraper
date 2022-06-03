@@ -1,6 +1,6 @@
 from typing import Dict
 from requests import get
-from logging import error, info
+from logging import error, info, debug
 
 
 def get_pitch_report_workflow(
@@ -37,23 +37,24 @@ def get_pitch_id(
     :return:
     '''
     try:
-        pitch_id = pitch_url.split('/')[-1].replace('%3D', '')
-        info('Extracted pitch id {} from {}'.format(
-            pitch_id,
-            pitch_url
+        pitch_id = pitch_url.split('/')
+        pitch_id = pitch_id[-1]
+        pitch_id = pitch_id.replace('%3D', '')
+    except (TypeError, IndexError):
+        return error(
+            '{} is not a valid url'.format(
+                pitch_url
             )
         )
-        return add_pitch_id_to_request_url_and_headers(
-            request_url=request_url,
-            pitch_id=pitch_id,
-            headers=headers
-        )
 
-    except TypeError:
-        return error('{} is not a valid url'.format(pitch_url))
+    return update_request_url_and_headers(
+        request_url=request_url,
+        pitch_id=pitch_id,
+        headers=headers
+    )
 
 
-def add_pitch_id_to_request_url_and_headers(
+def update_request_url_and_headers(
     request_url: str,
     pitch_id: str,
     headers: Dict
@@ -67,8 +68,9 @@ def add_pitch_id_to_request_url_and_headers(
     :return:
     '''
     headers['Path'] = headers['Path'].format(pitch_id)
-    info('Added pitch id {} to request URL and request headers'.format(
-        pitch_id
+    info(
+        'Added pitch id {} to request URL and request headers'.format(
+            pitch_id
         )
     )
     return get_pitch_report(
@@ -95,25 +97,24 @@ def get_pitch_report(
     ).json()
 
     if not pitch_report and retry_counter < 3:
+        print('Hallo')
         get_pitch_report(
             request_url=request_url,
             headers=headers,
             retry_counter=retry_counter+1
         )
-
     elif not pitch_report and retry_counter >= 3:
         return error('No pitch report found at {}'.format(
             request_url
             )
         )
-
     else:
-        return pitch_report_no_empty(
+        return pitch_report_not_empty(
             pitch_report=pitch_report
         )
 
 
-def pitch_report_no_empty(
+def pitch_report_not_empty(
     pitch_report: Dict
 ):
     '''
@@ -122,8 +123,11 @@ def pitch_report_no_empty(
     :param: pitch_report: The pitch report data
     :return:
     '''
-    if 'kinematics' in pitch_report['result']:
-        info('Got pitch report')
-        return pitch_report
-    else:
-        return error('Pitch report does not contain kinematics data')
+    try:
+        if 'kinematics' in pitch_report['result']:
+            info('Got pitch report')
+            return pitch_report
+        else:
+            return error('Pitch report does not contain kinematics data')
+    except:
+        pass
