@@ -1,6 +1,6 @@
 from typing import Dict
 from requests import get
-from logging import error, info, debug
+from logging import error
 
 
 def get_pitch_report_workflow(
@@ -68,11 +68,6 @@ def update_request_url_and_headers(
     :return:
     '''
     headers['Path'] = headers['Path'].format(pitch_id)
-    info(
-        'Added pitch id {} to request URL and request headers'.format(
-            pitch_id
-        )
-    )
     return get_pitch_report(
         request_url=request_url.format(pitch_id),
         headers=headers
@@ -103,8 +98,9 @@ def get_pitch_report(
             retry_counter=retry_counter+1
         )
     elif not pitch_report and retry_counter >= 3:
-        return error('No pitch report found at {}'.format(
-            request_url
+        return error(
+            'No pitch report found at {}'.format(
+                request_url
             )
         )
     else:
@@ -122,11 +118,7 @@ def pitch_report_not_empty(
     :param: pitch_report: The pitch report data
     :return:
     '''
-    try:
-        if 'kinematics' in pitch_report['result']:
-            info('Got pitch report')
-            return pitch_report
-        else:
-            return error('Pitch report does not contain kinematics data')
-    except:
-        pass
+    if 'kinematics' in pitch_report['result']:
+        return pitch_report
+    else:
+        return error('Pitch report does not contain kinematics data')

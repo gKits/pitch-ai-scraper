@@ -4,7 +4,8 @@ from json import dump
 
 
 request_url = (
-    'https://pitchai-api-prod.proplayai.com/v1/Pitch/GetUnsubscribedUserPitchReport?value={}='
+    'https://pitchai-api-prod.proplayai.com/v1/Pitch/'
+    'GetUnsubscribedUserPitchReport?value={}='
 )
 
 headers = {
@@ -16,7 +17,7 @@ headers = {
 
 pitch_report = get_pitch_report_workflow(
     request_url=request_url,
-    pitch_url='https://pitchai.proplayai.com/shared/report/pitch/NTc1MDM%3D',       
+    pitch_url='https://pitchai.proplayai.com/shared/report/pitch/NTc1MDM%3D',
     headers=headers
 )
 

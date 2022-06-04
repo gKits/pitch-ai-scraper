@@ -12,7 +12,6 @@ def get_kinamtics_data_workflow(
     :param: pitch_report: The pitch report data
     :return:
     '''
-    print('Starting Kinematics Data Workflow')
     return get_frame_by_frame_data_and_key_list(
         pitch_report=pitch_report
     )
@@ -28,8 +27,12 @@ def get_frame_by_frame_data_and_key_list(
     :return:
     '''
     try:
-        key_list = loads(pitch_report['result']['kinematics'])['angle_list']
-        frame_data = loads(pitch_report['result']['kinematics'])['frames']
+        key_list = loads(
+            pitch_report['result']['kinematics']
+        )['angle_list']
+        frame_data = loads(
+            pitch_report['result']['kinematics']
+        )['frames']
     except (KeyError, TypeError, IndexError):
         return error('Unknow error')
 
