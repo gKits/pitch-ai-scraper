@@ -25,7 +25,7 @@ def parser() -> argparse.Namespace:
     args = parser.parse_args()
 
     return args
-    
+
 
 def main():
     '''
@@ -35,10 +35,9 @@ def main():
     :return:
     '''
     request_url = (
-    'https://pitchai-api-prod.proplayai.com/v1/Pitch/'
-    'GetUnsubscribedUserPitchReport?value={}='
+        'https://pitchai-api-prod.proplayai.com/v1/Pitch/'
+        'GetUnsubscribedUserPitchReport?value={}='
     )
-
 
     headers = {
         'Authority': 'pitchai-api-prod.proplayai.com',
