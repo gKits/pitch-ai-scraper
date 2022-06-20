@@ -46,11 +46,11 @@ def main():
         'Path': '/v1/Pitch/GetUnsubscribedUserPitchReport?value={}='
     }
 
-    args = parser
+    args = parser()
 
     pitch_report = get_pitch_report_workflow(
         request_url=request_url,
-        pitch_url=args['pitchURL'],
+        pitch_url=args.pitchURL,
         headers=headers
     )
 
