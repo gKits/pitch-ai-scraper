@@ -6,6 +6,10 @@ from workflows.get_kinematics_data import get_kinamtics_data_workflow
 
 def parser() -> argparse.Namespace:
     '''
+    This is the parser method
+
+    :param:
+    :return:
     '''
     parser = argparse.ArgumentParser(description='')
     parser.add_argument(
