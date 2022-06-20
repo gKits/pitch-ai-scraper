@@ -1,6 +1,6 @@
 from typing import Dict
 from requests import get
-from logging import error
+from ..error import URLException, PitchReportException
 
 
 def get_pitch_report_workflow(
@@ -41,7 +41,7 @@ def get_pitch_id(
         pitch_id = pitch_id[-1]
         pitch_id = pitch_id.replace('%3D', '')
     except (TypeError, IndexError):
-        return error(
+        raise URLException(
             '{} is not a valid url'.format(
                 pitch_url
             )
@@ -98,7 +98,7 @@ def get_pitch_report(
             retry_counter=retry_counter+1
         )
     elif not pitch_report and retry_counter >= 3:
-        return error(
+        raise PitchReportException(
             'No pitch report found at {}'.format(
                 request_url
             )
@@ -121,4 +121,6 @@ def pitch_report_not_empty(
     if 'kinematics' in pitch_report['result']:
         return pitch_report
     else:
-        return error('Pitch report does not contain kinematics data')
+        raise PitchReportException(
+            'Pitch report does not contain kinematics data'
+        )
