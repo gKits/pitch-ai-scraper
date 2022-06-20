@@ -1,6 +1,6 @@
 from typing import Dict, List
-from logging import error, info
 from json import loads
+from ..error import PitchReportException
 
 
 def get_kinamtics_data_workflow(
@@ -33,17 +33,18 @@ def get_frame_by_frame_data_and_key_list(
         frame_data = loads(
             pitch_report['result']['kinematics']
         )['frames']
-    except (KeyError, TypeError, IndexError):
-        return error('Unknow error')
+    except (KeyError, TypeError, IndexError) as e:
+        raise e
 
     if frame_data:
-        info('Retrived frame data')
         return sort_data_by_key_list(
             frame_data=frame_data,
             key_list=key_list
         )
     else:
-        return error('Frame data is missing')
+        raise PitchReportException(
+            'Frame data is missing'
+        )
 
 
 def sort_data_by_key_list(
@@ -70,5 +71,5 @@ def sort_data_by_key_list(
                 vel_ang_plot[key]['angle'].append(frame['angle'][i])
 
         return vel_ang_plot
-    except (KeyError, TypeError, IndexError):
-        return error('Unknow error')
+    except (KeyError, TypeError, IndexError) as e:
+        raise e
