@@ -1,6 +1,6 @@
 from typing import Dict
 from requests import get
-from ..error import URLException, PitchReportException
+from .error import URLException, PitchReportException
 
 
 def get_pitch_report_workflow(
