@@ -1,6 +1,6 @@
 from typing import Dict, List
 from json import loads
-from ..error import PitchReportException
+from .error import PitchReportException
 
 
 def get_kinamtics_data_workflow(
